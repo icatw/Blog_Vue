@@ -74,7 +74,7 @@ export default {
                     that.$store.commit("login", data.data);
                     // 保存token
                     that.$store.commit("setToken", data.data.saTokenInfo);
-                    this.axios.get("/api/admin/website/config").then(({ data }) => {
+                    that.axios.get("/api/admin/website/config").then(({ data }) => {
                       that.$store.commit("setWebsiteConfig", data.data);
                     });
                     // 加载用户菜单

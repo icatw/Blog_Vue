@@ -62,12 +62,14 @@
         prop="loginType"
         label="登录方式"
         align="center"
-        width="80"
+        width="100"
       >
         <template slot-scope="scope">
           <el-tag type="success" v-if="scope.row.loginType == 1">邮箱</el-tag>
           <el-tag v-if="scope.row.loginType == 2">QQ</el-tag>
           <el-tag type="danger" v-if="scope.row.loginType == 3">微博</el-tag>
+          <el-tag type="danger" v-if="scope.row.loginType == 4">Gitee</el-tag>
+          <el-tag type="danger" v-if="scope.row.loginType == 5">GitHub</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="roleList" label="用户角色" align="center">
@@ -194,7 +196,7 @@ export default {
       loading: true,
       isEdit: false,
       userForm: {
-        userInfoId: null,
+        userId: null,
         nickname: ""
       },
       loginType: null,
@@ -236,8 +238,20 @@ export default {
     },
     changeDisable(user) {
       this.axios.put("/api/admin/users/disable", {
-        id: user.userInfoId,
+        id: user.id,
         isDisable: user.isDisable
+      }).then(({ data }) => {
+        if (data.flag) {
+          this.$notify.success({
+            title: "成功",
+            message: data.message
+          });
+        } else {
+          this.$notify.error({
+            title: "失败",
+            message: data.message
+          });
+        }
       });
     },
     openEditModel(user) {

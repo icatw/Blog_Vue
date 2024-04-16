@@ -15,7 +15,7 @@
           type="danger"
           size="small"
           icon="el-icon-delete"
-          :disabled="this.categoryIdList.length == 0"
+          :disabled="this.oauthIdList.length == 0"
           @click="isDelete = true"
       >
         批量删除
@@ -25,16 +25,16 @@
             v-model="keywords"
             prefix-icon="el-icon-search"
             size="small"
-            placeholder="请输入分类名"
+            placeholder="请输入应用名"
             style="width:200px"
-            @keyup.enter.native="searchCategories"
+            @keyup.enter.native="searchOauth"
         />
         <el-button
             type="primary"
             size="small"
             icon="el-icon-search"
             style="margin-left:1rem"
-            @click="searchCategories"
+            @click="searchOauth"
         >
           搜索
         </el-button>
@@ -43,21 +43,47 @@
     <!-- 表格展示 -->
     <el-table
         border
-        :data="categoryList"
+        :data="oauthList"
         @selection-change="selectionChange"
         v-loading="loading"
     >
       <!-- 表格列 -->
       <el-table-column type="selection" width="55" />
-      <!-- 分类名 -->
-      <el-table-column prop="categoryName" label="分类名" align="center" />
-      <!-- 文章量 -->
-      <el-table-column prop="articleCount" label="文章量" align="center" />
-      <!-- 分类创建时间 -->
+      <el-table-column
+          type="index"
+          width="50">
+      </el-table-column>
+      <!-- 三方登录方式 -->
+      <el-table-column prop="type" label="应用名称" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.appName }}
+        </template>
+      </el-table-column>
+      <!-- 三方登录方式 -->
+      <el-table-column prop="type" label="登录方式" align="center">
+        <template slot-scope="scope">
+          <el-tag>{{ scope.row.oauthName }}</el-tag>
+        </template>
+      </el-table-column>
+      <!--状态-->
+      <el-table-column prop="enabled" label="状态" align="center">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.isDisable===0" type="success">启用</el-tag>
+          <el-tag v-else type="danger">禁用</el-tag>
+        </template>
+      </el-table-column>
+      <!-- 三方登录信息创建时间 -->
       <el-table-column prop="createTime" label="创建时间" align="center">
         <template slot-scope="scope">
           <i class="el-icon-time" style="margin-right:5px" />
           {{ scope.row.createTime | date }}
+        </template>
+      </el-table-column>
+      <!-- 三方登录信息创建时间 -->
+      <el-table-column prop="createTime" label="修改时间" align="center">
+        <template slot-scope="scope">
+          <i class="el-icon-time" style="margin-right:5px" />
+          {{ scope.row.updateTime | date }}
         </template>
       </el-table-column>
       <!-- 列操作 -->
@@ -69,7 +95,7 @@
           <el-popconfirm
               title="确定删除吗？"
               style="margin-left:1rem"
-              @confirm="deleteCategory(scope.row.id)"
+              @confirm="deleteoauth(scope.row.id)"
           >
             <el-button size="mini" type="danger" slot="reference">
               删除
@@ -98,22 +124,43 @@
       <div style="font-size:1rem">是否删除选中项？</div>
       <div slot="footer">
         <el-button @click="isDelete = false">取 消</el-button>
-        <el-button type="primary" @click="deleteCategory(null)">
+        <el-button type="primary" @click="deleteoauth(null)">
           确 定
         </el-button>
       </div>
     </el-dialog>
     <!-- 添加编辑对话框 -->
-    <el-dialog :visible.sync="addOrEdit" width="30%">
-      <div class="dialog-title-container" slot="title" ref="categoryTitle" />
-      <el-form label-width="80px" size="medium" :model="categoryForm">
-        <el-form-item label="分类名">
-          <el-input v-model="categoryForm.categoryName" style="width:220px" />
+    <el-dialog :visible.sync="addOrEdit" width="40%">
+      <div class="dialog-title-container" slot="title" ref="oauthTitle" />
+      <el-form label-width="118px" size="medium" :model="oauthForm">
+        <el-form-item label="应用名称" prop="name" :rules="{ required: true, message: '请输入第三方应用名' }">
+          <el-input v-model="oauthForm.appName"></el-input>
+        </el-form-item>
+        <el-form-item label="选择登录方式" prop="type" :rules="{ required: true, message: '请选择登录方式' }">
+          <el-select v-model="oauthForm.oauthName" placeholder="请选择">
+            <el-option label="QQ" value="qq"></el-option>
+            <el-option label="Gitee" value="gitee"></el-option>
+            <el-option label="GitHub" value="github"></el-option>
+            <el-option label="微博" value="weibo"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="是否启用" prop="isDisable" :rules="{ required: true, message: '请选择是否启用' }">
+          <el-switch
+              v-model="oauthForm.isDisable"
+              :active-value="0"
+              :inactive-value="1"
+          ></el-switch>
+        </el-form-item>
+        <el-form-item label="Client ID" prop="clientId" :rules="{ required: true, message: '请输入Client ID' }">
+          <el-input v-model="oauthForm.clientId"></el-input>
+        </el-form-item>
+        <el-form-item label="Client Secret" prop="clientSecret" :rules="{ required: true, message: '请输入Client Secret' }">
+          <el-input v-model="oauthForm.clientSecret"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button @click="addOrEdit = false">取 消</el-button>
-        <el-button type="primary" @click="addOrEditCategory">
+        <el-button type="primary" @click="addOrEditoauth">
           确 定
         </el-button>
       </div>
@@ -124,7 +171,7 @@
 <script>
 export default {
   created() {
-    this.listCategories();
+    this.listOauth();
   },
   data: function() {
     return {
@@ -132,11 +179,16 @@ export default {
       loading: true,
       addOrEdit: false,
       keywords: null,
-      categoryIdList: [],
-      categoryList: [],
-      categoryForm: {
+      oauthIdList: [],
+      oauthList: [],
+      oauthForm: {
         id: null,
-        categoryName: ""
+        type: '',
+        appName: '',
+        oauthName: '',
+        isDisable: 0,
+        clientId: '',
+        clientSecret: ''
       },
       current: 1,
       size: 10,
@@ -144,38 +196,38 @@ export default {
     };
   },
   methods: {
-    selectionChange(categoryList) {
-      this.categoryIdList = [];
-      categoryList.forEach(item => {
-        this.categoryIdList.push(item.id);
+    selectionChange(oauthList) {
+      this.oauthIdList = [];
+      oauthList.forEach(item => {
+        this.oauthIdList.push(item.id);
       });
     },
-    searchCategories() {
+    searchOauth() {
       this.current = 1;
-      this.listCategories();
+      this.listOauth();
     },
     sizeChange(size) {
       this.size = size;
-      this.listCategories();
+      this.listOauth();
     },
     currentChange(current) {
       this.current = current;
-      this.listCategories();
+      this.listOauth();
     },
-    deleteCategory(id) {
+    deleteoauth(id) {
       var param = {};
       if (id == null) {
-        param = { data: this.categoryIdList };
+        param = { data: this.oauthIdList };
       } else {
         param = { data: [id] };
       }
-      this.axios.delete("/api/admin/categories", param).then(({ data }) => {
+      this.axios.delete("/api/admin/oauth", param).then(({ data }) => {
         if (data.flag) {
           this.$notify.success({
             title: "成功",
             message: data.message
           });
-          this.listCategories();
+          this.listOauth();
         } else {
           this.$notify.error({
             title: "失败",
@@ -185,9 +237,9 @@ export default {
         this.isDelete = false;
       });
     },
-    listCategories() {
+    listOauth() {
       this.axios
-          .get("/api/admin/categories", {
+          .get("/api/admin/oauth", {
             params: {
               current: this.current,
               size: this.size,
@@ -195,36 +247,38 @@ export default {
             }
           })
           .then(({ data }) => {
-            this.categoryList = data.data.recordList;
+            this.oauthList = data.data.recordList;
             this.count = data.data.count;
             this.loading = false;
           });
     },
-    openModel(category) {
-      if (category != null) {
-        this.categoryForm = JSON.parse(JSON.stringify(category));
-        this.$refs.categoryTitle.innerHTML = "修改分类";
+    openModel(oauth) {
+      if (oauth != null) {
+        this.oauthForm = JSON.parse(JSON.stringify(oauth));
+        this.$refs.oauthTitle.innerHTML = "修改三方登录信息";
       } else {
-        this.categoryForm.id = null;
-        this.categoryForm.categoryName = "";
-        this.$refs.categoryTitle.innerHTML = "添加分类";
+        this.oauthForm.id = null;
+        this.oauthForm.type = "";
+        this.oauthForm.appName = "";
+        this.oauthForm.oauthName = "";
+        this.oauthForm.isDisable=null;
+        this.oauthForm.clientId = "";
+        this.oauthForm.clientSecret = "";
+
+        this.$refs.oauthTitle.innerHTML = "添加三方登录信息";
       }
       this.addOrEdit = true;
     },
-    addOrEditCategory() {
-      if (this.categoryForm.categoryName.trim() == "") {
-        this.$message.error("分类名不能为空");
-        return false;
-      }
+    addOrEditoauth() {
       this.axios
-          .post("/api/admin/categories", this.categoryForm)
+          .post("/api/admin/oauth", this.oauthForm)
           .then(({ data }) => {
             if (data.flag) {
               this.$notify.success({
                 title: "成功",
                 message: data.message
               });
-              this.listCategories();
+              this.listOauth();
             } else {
               this.$notify.error({
                 title: "失败",

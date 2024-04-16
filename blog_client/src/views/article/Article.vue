@@ -144,7 +144,7 @@
             <!-- 上一篇 -->
             <div
               :class="isFull(article.lastArticle.id)"
-              v-if="article.lastArticle.id"
+              v-if="article.lastArticle&&article.lastArticle.id"
             >
               <router-link :to="'/articles/' + article.lastArticle.id">
                 <img
@@ -162,7 +162,7 @@
             <!-- 下一篇 -->
             <div
               :class="isFull(article.nextArticle.id)"
-              v-if="article.nextArticle.id"
+              v-if="article.nextArticle&&article.nextArticle.id"
             >
               <router-link :to="'/articles/' + article.nextArticle.id">
                 <img
