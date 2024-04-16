@@ -18,15 +18,14 @@ export default new Vuex.Store({
     token: {
       tokenName: "",
       tokenValue: ""
-    }
+    },
+    websiteConfig: null
   },
   getters: {
     getToken(state) {
       if (state.token && state.token.tokenName) {
-        console.log("token.tokenName:" + state.token.tokenName);
         return state.token;
       } else {
-        // 如果state.token不存在或者tokenName为空，则从localStorage中获取token
         return localStorage.getItem("token");
       }
     }
@@ -36,6 +35,9 @@ export default new Vuex.Store({
       state.token.tokenName = token.tokenName;
       state.token.tokenValue = token.tokenValue;
       localStorage.setItem("token", JSON.stringify(token));
+    },
+    setWebsiteConfig(state, config) {
+      state.websiteConfig = config;
     },
     saveTab(state, tab) {
       if (state.tabList.findIndex(item => item.path === tab.path) == -1) {
@@ -75,6 +77,7 @@ export default new Vuex.Store({
         tokenName: "",
         tokenValue: ""
       };
+      state.websiteConfig = null;
     },
     updateAvatar(state, avatar) {
       state.avatar = avatar;

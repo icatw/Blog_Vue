@@ -70,11 +70,27 @@
             />
           </el-form-item>
           <el-form-item label="第三方登录">
-            <el-checkbox-group v-model="websiteConfigForm.socialLoginList">
+            <el-checkbox-group v-model="websiteConfigForm.socialLoginList" @change="handleCheckboxChange">
               <el-checkbox label="qq">QQ</el-checkbox>
+              <el-checkbox label="gitee">Gitee</el-checkbox>
+              <el-checkbox label="github">GitHub</el-checkbox>
               <el-checkbox label="weibo">微博</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
+          <el-dialog :visible.sync="dialogVisible" title="请输入clientId和clientSecret">
+            <el-form :model="clientForm">
+              <el-form-item label="clientId">
+                <el-input v-model="clientForm.clientId" />
+              </el-form-item>
+              <el-form-item label="clientSecret">
+                <el-input v-model="clientForm.clientSecret" />
+              </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+      <el-button @click="dialogVisible = false">取 消</el-button>
+      <el-button type="primary" @click="submitClientForm">确 定</el-button>
+    </span>
+          </el-dialog>
           <el-button
             type="primary"
             size="medium"
@@ -124,8 +140,8 @@
           </el-checkbox-group>
         </el-form>
       </el-tab-pane>
-      <!-- 修改密码 -->
-      <el-tab-pane label="其他设置" name="password">
+      <!-- 其他设置 -->
+      <el-tab-pane label="其他设置" name="other">
         <el-form
           label-width="120px"
           :model="websiteConfigForm"
@@ -173,8 +189,14 @@
               <el-radio :label="1">开启</el-radio>
             </el-radio-group>
           </el-form-item>
+          <el-form-item label="文章默认封面">
+            <el-radio-group v-model="websiteConfigForm.isRandomCover">
+              <el-radio :label="0">关闭</el-radio>
+              <el-radio :label="1">开启</el-radio>
+            </el-radio-group>
+          </el-form-item>
           <el-form-item label="敏感词过滤">
-            <el-radio-group v-model="websiteConfigForm.isEmailNotice">
+            <el-radio-group v-model="websiteConfigForm.isSensitiveWordFilter">
               <el-radio :label="0">关闭</el-radio>
               <el-radio :label="1">开启</el-radio>
             </el-radio-group>
@@ -298,13 +320,38 @@ export default {
         websocketUrl: "",
         isMusicPlayer: 1,
         isEmailNotice: 1,
+        isSensitiveWordFilter:1,
+        isRandomCover:1,
         isCommentReview: 0,
         isMessageReview: 0
       },
-      activeName: "info"
+      activeName: "info",
+      dialogVisible: false,
+      clientForm: {
+        clientId: '',
+        clientSecret: ''
+      },
+      selectedLogin: ''
     };
   },
   methods: {
+    handleCheckboxChange(value) {
+      console.log(value);
+      // 获取最后一个被操作的复选框
+      const lastChanged = value[value.length - 1];
+      // 判断最后一个被操作的复选框是否被勾选
+      if (this.websiteConfigForm.socialLoginList.includes(lastChanged)) {
+        this.selectedLogin = lastChanged;
+        this.dialogVisible = true;
+      }
+    },
+    submitClientForm() {
+      console.log('clientId:', this.clientForm.clientId);
+      console.log('clientSecret:', this.clientForm.clientSecret);
+      console.log('Selected login:', this.selectedLogin);
+      // 在这里你可以发送请求来保存clientId和clientSecret
+      this.dialogVisible = false;
+    },
     getWebsiteConfig() {
       this.axios.get("/api/admin/website/config").then(({ data }) => {
         this.websiteConfigForm = data.data;
@@ -337,6 +384,7 @@ export default {
               title: "成功",
               message: data.message
             });
+            this.$store.commit("setWebsiteConfig", this.websiteConfigForm);
           } else {
             this.$notify.error({
               title: "失败",

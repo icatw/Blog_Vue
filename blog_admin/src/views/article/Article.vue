@@ -228,6 +228,7 @@ export default {
   },
   data: function() {
     return {
+      webSiteConfig: this.$store.state.websiteConfig,
       addOrEdit: false,
       autoSave: true,
       categoryName: "",
@@ -355,6 +356,7 @@ export default {
       this.autoSave = false;
     },
     saveOrUpdateArticle() {
+      console.log(this.webSiteConfig)
       if (this.article.articleTitle.trim() == "") {
         this.$message.error("文章标题不能为空");
         return false;
@@ -371,15 +373,7 @@ export default {
         this.$message.error("文章标签不能为空");
         return false;
       }
-      if (this.article.articleCover.trim() == "") {
-        //TODO 当封面为空时，上传默认封面
-        // this.axios.post("https://tenapi.cn/v2/acg", { format: "json" }).then(response => {
-        //   console.log(response)
-        //   this.article.articleCover = response;
-        // });
-        this.article.articleCover =
-          "http://icatw-blog.oss-cn-beijing.aliyuncs.com/articles/d34b4d9b7fcb59c2a9af90d8896ec5e0.jpg";
-        return true;
+      if (this.article.articleCover.trim() == ""&&this.webSiteConfig.isRandomCover!==1) {
         this.$message.error("文章封面不能为空");
         return false;
       }

@@ -42,13 +42,6 @@
         <div v-if="socialLoginList.length > 0">
           <div class="social-login-title">社交账号登录</div>
           <div class="social-login-wrapper">
-            <!-- 微博登录 -->
-            <a
-              v-if="showLogin('weibo')"
-              class="mr-3 iconfont iconweibo"
-              style="color:#e05244;padding: 0 3px;"
-              @click="weiboLogin"
-            />
             <!-- qq登录 -->
             <a
               v-if="showLogin('qq')"
@@ -58,17 +51,24 @@
             />
             <!-- gitee登录 -->
             <a
-              v-if="showLogin('qq')"
+              v-if="showLogin('gitee')"
               class="iconfont icongitee-fill-round"
               style="color:#00AAEE;padding: 0 3px;"
               @click="socialLogin('gitee')"
             />
             <!-- github -->
             <a
-              v-if="showLogin('qq')"
+              v-if="showLogin('github')"
               class="iconfont icongithub"
               style="color:#00AAEE;padding: 0 3px;"
               @click="socialLogin('github')"
+            />
+            <!-- 微博登录 -->
+            <a
+                v-if="showLogin('weibo')"
+                class="mr-3 iconfont iconweibo"
+                style="color:#e05244;padding: 0 3px;"
+                @click="weiboLogin"
             />
           </div>
         </div>
