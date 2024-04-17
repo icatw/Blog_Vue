@@ -69,14 +69,14 @@
               style="width:400px"
             />
           </el-form-item>
-          <el-form-item label="第三方登录">
+<!--          <el-form-item label="第三方登录">
             <el-checkbox-group v-model="websiteConfigForm.socialLoginList" @change="handleCheckboxChange">
               <el-checkbox label="qq">QQ</el-checkbox>
               <el-checkbox label="gitee">Gitee</el-checkbox>
               <el-checkbox label="github">GitHub</el-checkbox>
               <el-checkbox label="weibo">微博</el-checkbox>
             </el-checkbox-group>
-          </el-form-item>
+          </el-form-item>-->
           <el-dialog :visible.sync="dialogVisible" title="请输入clientId和clientSecret">
             <el-form :model="clientForm">
               <el-form-item label="clientId">
