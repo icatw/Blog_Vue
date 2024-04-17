@@ -23,7 +23,7 @@
       <el-button
           v-if="isDelete == 0"
           type="danger"
-          size="small"
+          size="mini"
           icon="el-icon-delete"
           :disabled="articleIdList.length == 0"
           @click="updateIsDelete = true"
@@ -34,7 +34,7 @@
       <el-button
           v-else
           type="danger"
-          size="small"
+          size="mini"
           icon="el-icon-delete"
           :disabled="articleIdList.length == 0"
           @click="remove = true"
@@ -45,7 +45,7 @@
       <el-dropdown trigger="click">
         <el-button
             type="success"
-            size="small"
+            size="mini"
             icon="el-icon-download"
             :disabled="articleIdList.length == 0"
             style="margin-right:1rem"
@@ -56,7 +56,7 @@
           <el-dropdown-item>
             <el-button
                 type="success"
-                size="small"
+                size="mini"
                 :disabled="articleIdList.length == 0"
                 style="margin-right:1rem"
                 @click="isExport = true;exportType = 'PDF'"
@@ -67,7 +67,7 @@
           <el-dropdown-item>
             <el-button
                 type="success"
-                size="small"
+                size="mini"
                 :disabled="articleIdList.length == 0"
                 style="margin-right:1rem"
                 @click="isExport = true;exportType = 'MD'"
@@ -91,7 +91,7 @@
       <el-dropdown>
         <el-button
             type="primary"
-            size="small"
+            size="mini"
             icon="el-icon-upload"
             style="margin-right:1rem"
         >
@@ -124,8 +124,11 @@
           >
         </el-dropdown-menu>
       </el-dropdown>
+      <el-button size="mini" class="filter-item" @click="dialogTableVisible = true"  type="primary"
+                 icon="el-icon-cpu">文章抓取
+      </el-button>
       <!-- 条件筛选 -->
-      <div style="margin-left:auto">
+      <div style="margin-left:0;margin-top: 1rem">
         <!-- 文章类型 -->
         <el-select
             clearable
@@ -421,6 +424,31 @@
         </el-button>
       </div>
     </el-dialog>
+    <el-dialog title="文章抓取" :visible.sync="dialogTableVisible">
+      <el-form>
+        <el-form-item label="抓取类型" :label-width="formLabelWidth">
+          <el-radio-group v-model="reptile.type" size="mini">
+            <el-radio :label="0" border>CSDN</el-radio>
+            <el-radio disabled :label="1" border>OSCHINA</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="目标地址url" :label-width="formLabelWidth">
+          <el-input v-model="reptile.url" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="tip" :label-width="formLabelWidth">
+          <span style="color: limegreen">
+            请注意如下几点:<br />
+            1.如果抓取成功则会自动保存到文章表中<br />
+            2.CSDN的文章没有封面图片，所以会是随机图片<br />
+            3.暂时只支持CSDN的文章抓取
+          </span>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogTableVisible = false">取 消</el-button>
+        <el-button :loading="loadingReptile" type="primary" @click="handleReptile">确 定</el-button>
+      </div>
+    </el-dialog>
   </el-card>
 </template>
 
@@ -433,6 +461,12 @@ export default {
   },
   data: function () {
     return {
+      reptile: {
+        type: 0,
+        url: null
+      },
+      loadingReptile: false,
+      formLabelWidth: "120px",
       loading: true,
       updateIsDelete: false,
       remove: false,
@@ -465,10 +499,37 @@ export default {
       size: 10,
       count: 0,
       isExport: false,
-      exportType: null
+      exportType: null,
+      dialogTableVisible: false
     };
   },
   methods: {
+    handleReptile: function () {
+      if (this.reptile.url === '' || this.reptile.url == null) {
+        this.$message.error("请输入抓取地址!!")
+        return false;
+      }
+      this.loadingReptile = true
+      this.axios.get("/api/admin/articles/reptile", {
+        params:{url: this.reptile.url
+        }}).then(({data}) => {
+        if (data.flag) {
+          this.$notify.success({
+            title: "成功",
+            message: data.message
+          });
+
+          this.listArticles();
+        } else {
+          this.$notify.error({
+            title: "失败",
+            message: data.message
+          });
+        }
+        this.dialogTableVisible = false
+        this.loadingReptile = false
+      });
+    },
     exportArticles(id) {
       const param = {
         idList: id == null ? this.articleIdList : [id],
@@ -739,9 +800,13 @@ export default {
 
 <style scoped>
 .operation-container {
+  display: flex;
+  flex-wrap: wrap;
+  //justify-content: space-between;
   margin-top: 1.5rem;
+  //align-items: center;
+  align-items: flex-start;
 }
-
 .article-status-menu {
   font-size: 14px;
   margin-top: 40px;
