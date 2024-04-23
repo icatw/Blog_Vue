@@ -9,6 +9,13 @@ module.exports = {
           "^/api": ""
         }
       },
+      "/chatApi": {
+        target: "http://localhost:8999",
+        changeOrigin: true,
+        pathRewrite: {
+          "^/chatApi": ""
+        }
+      },
       "/musicApi": {
         target: "http://localhost:3000",
         changeOrigin: true,

@@ -4,6 +4,8 @@ import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
 import animated from "animate.css";
+import ElementUI from "element-ui";
+import "element-ui/lib/theme-chalk/index.css";
 import "./assets/css/index.css";
 import "./assets/css/iconfont.css";
 import "./assets/css/markdown.css";
@@ -31,7 +33,21 @@ Vue.use(InfiniteLoading);
 Vue.use(VueAxios, axios);
 Vue.use(VueImageSwipe);
 Vue.use(Toast);
+Vue.use(ElementUI);
+import VMdPreview from '@kangc/v-md-editor/lib/preview';
+import '@kangc/v-md-editor/lib/style/preview.css';
+import githubTheme from '@kangc/v-md-editor/lib/theme/github.js';
+import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress.js';
+import '@kangc/v-md-editor/lib/theme/style/github.css';
 
+// highlightjs
+import hljs from 'highlight.js';
+
+VMdPreview.use(vuepressTheme, {
+  Hljs: hljs,
+});
+
+Vue.use(VMdPreview);
 Vue.filter("date", function(value) {
   return dayjs(value).format("YYYY-MM-DD");
 });

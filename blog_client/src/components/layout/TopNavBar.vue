@@ -89,6 +89,16 @@
           </router-link>
         </div>
         <div class="menus-item">
+          <router-link class="menu-btn" to="/aiChat">
+            <i class="iconfont iconpinglunzu" /> AIChat
+          </router-link>
+        </div>
+        <div class="menus-item">
+          <router-link class="menu-btn" to="/wenXinChat">
+            <i class="iconfont iconpinglunzu" /> 文心一言
+          </router-link>
+        </div>
+        <div class="menus-item">
           <a
             class="menu-btn"
             v-if="!this.$store.state.avatar"

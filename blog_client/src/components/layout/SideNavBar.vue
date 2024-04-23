@@ -88,6 +88,11 @@
           <i class="iconfont iconpinglunzu" /> 留言
         </router-link>
       </div>
+      <div class="menus-item">
+        <router-link class="menu-btn" to="/wenXinChat">
+          <i class="iconfont iconpinglunzu" /> 文心一言
+        </router-link>
+      </div>
       <div class="menus-item" v-if="!this.$store.state.avatar">
         <a @click="openLogin"><i class="iconfont icondenglu" /> 登录 </a>
       </div>

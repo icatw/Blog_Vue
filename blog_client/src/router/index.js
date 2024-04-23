@@ -88,6 +88,20 @@ const routes = [
     }
   },
   {
+    path: "/aiChat",
+    component: resolve => require(["../views/aiChat/AIChat.vue"], resolve),
+    meta: {
+      title: "AIChat"
+    }
+  },
+  {
+    path: "/wenXinChat",
+    component: resolve => require(["../views/aiChat/WenXin.vue"], resolve),
+    meta: {
+      title: "文心一言"
+    }
+  },
+  {
     path: "/user",
     component: resolve => require(["../views/user/User.vue"], resolve),
     meta: {
