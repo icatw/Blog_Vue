@@ -2,14 +2,25 @@
   <div id="app">
     <div class="chat-container">
 
-      <!-- 模型选择 -->
-      <div class="model-select">
-        <label for="model">选择模型: </label>
-        <el-select v-model="selectedModel" @change="updateUrl" id="model">
-          <el-option label="ErnieBot" value="ErnieBot"></el-option>
-          <el-option label="ErnieBot-Turbo" value="ErnieBot-Turbo"></el-option>
-          <el-option label="BloomZ-7B" value="BloomZ-7B"></el-option>
-        </el-select>
+      <!-- 添加标题和选择框 -->
+      <div class="header-container">
+        <el-header>
+          <h1>文心一言</h1>
+          <!-- 添加带有提示的图标 -->
+          <el-tooltip class="item" effect="dark" content="该AI对话功能使用的是文心一言的api......" placement="top" style="margin-left: 10px;">
+            <el-icon class="el-icon-question"></el-icon>
+          </el-tooltip>
+        </el-header>
+
+        <!-- 模型选择 -->
+        <div class="model-select">
+          <label for="model">选择模型: </label>
+          <el-select v-model="selectedModel" @change="updateUrl" id="model">
+            <el-option label="ErnieBot" value="ErnieBot"></el-option>
+            <el-option label="ErnieBot-Turbo" value="ErnieBot-Turbo"></el-option>
+            <el-option label="BloomZ-7B" value="BloomZ-7B"></el-option>
+          </el-select>
+        </div>
       </div>
 
       <div class="chat-box">
@@ -247,7 +258,7 @@ export default {
 }
 
 .model-select {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .avatar {
@@ -275,5 +286,16 @@ export default {
   margin-left: 10px;
   border-radius: 10px;
 }
+.header-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 
+.el-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 </style>
