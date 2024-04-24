@@ -137,7 +137,7 @@ export default {
   },
   data: function() {
     return {
-      navClass: ""
+      navClass: "nav"
     };
   },
   methods: {
@@ -200,7 +200,8 @@ ul {
   background: rgba(0, 0, 0, 0) !important;
 }
 .nav a {
-  color: #eee !important;
+  //color: #eee !important;
+  color: #4c4948 !important;
 }
 .nav .menu-btn {
   text-shadow: 0.05rem 0.05rem 0.1rem rgba(0, 0, 0, 0.3);
