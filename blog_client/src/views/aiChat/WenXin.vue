@@ -5,7 +5,7 @@
       <!-- 添加标题和选择框 -->
       <div class="header-container">
         <el-header>
-          <h1>文心一言</h1>
+          <h1>欢迎使用文心一言</h1>
           <!-- 添加带有提示的图标 -->
           <el-tooltip class="item" effect="dark" content="该AI对话功能使用的是文心一言的api......" placement="top" style="margin-left: 10px;">
             <el-icon class="el-icon-question"></el-icon>

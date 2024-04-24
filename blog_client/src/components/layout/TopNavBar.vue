@@ -88,11 +88,11 @@
             <i class="iconfont iconpinglunzu" /> 留言
           </router-link>
         </div>
-        <div class="menus-item">
+<!--        <div class="menus-item">
           <router-link class="menu-btn" to="/aiChat">
             <i class="iconfont iconpinglunzu" /> AIChat
           </router-link>
-        </div>
+        </div>-->
         <div class="menus-item">
           <router-link class="menu-btn" to="/wenXinChat">
             <i class="iconfont iconpinglunzu" /> 文心一言

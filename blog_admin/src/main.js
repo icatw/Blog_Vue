@@ -69,7 +69,7 @@ router.afterEach(() => {
 axios.interceptors.request.use(
   function(config) {
     let token = store.getters.getToken;
-    if (token) {
+    if (token && token.tokenName && token.tokenValue) {
       config.headers[token.tokenName] = token.tokenValue;
     }
     return config;
