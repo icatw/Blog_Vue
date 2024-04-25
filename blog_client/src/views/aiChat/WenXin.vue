@@ -5,7 +5,7 @@
       <!-- 添加标题和选择框 -->
       <div class="header-container">
         <el-header>
-          <h1>欢迎使用文心一言</h1>
+          <h2 class="gradient-text">欢迎使用AI小助手，有任何问题都可以向我提问喔~</h2>
           <!-- 添加带有提示的图标 -->
           <el-tooltip class="item" effect="dark" content="该AI对话功能使用的是文心一言的api......" placement="top" style="margin-left: 10px;">
             <el-icon class="el-icon-question"></el-icon>
@@ -16,9 +16,9 @@
         <div class="model-select">
           <label for="model">选择模型: </label>
           <el-select v-model="selectedModel" @change="updateUrl" id="model">
-            <el-option label="ErnieBot" value="ErnieBot"></el-option>
-            <el-option label="ErnieBot-Turbo" value="ErnieBot-Turbo"></el-option>
-            <el-option label="BloomZ-7B" value="BloomZ-7B"></el-option>
+            <el-option label="文心一言4.0" value="ErnieBot"></el-option>
+            <el-option label="文心一言-Turbo" value="ErnieBot-Turbo"></el-option>
+<!--            <el-option label="BloomZ-7B" value="BloomZ-7B"></el-option>-->
           </el-select>
         </div>
       </div>
@@ -43,7 +43,7 @@
             @keydown.native="handleKeyDown"
             @focus="isInputFocused = true"
             @blur="isInputFocused = false"
-            placeholder="请输入消息..."
+            placeholder="请输入消息...（可通过Alt+回车换行）"
             :class="{'focused': isInputFocused}"
             class="input-height resizable-textarea"
             type="textarea"
@@ -219,6 +219,11 @@ export default {
 </script>
 
 <style scoped>
+.gradient-text {
+  background: linear-gradient(90deg, rgba(247, 149, 51, 1) 0, rgba(243, 112, 85, 1) 15%, rgba(239, 78, 123, 1) 30%, rgba(161, 102, 171, 1) 44%, rgba(80, 115, 184, 1) 58%, rgba(16, 152, 173, 1) 72%, rgba(7, 179, 155, 1) 86%, rgba(109, 186, 130, 1) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 .chat-container {
   max-width: 1080px;
   margin: 30px auto;
@@ -227,14 +232,18 @@ export default {
   padding: 20px;
   display: flex;
   flex-direction: column;
-  height: 95vh;
+  height: 85vh;
   background-color: #fff;
+  justify-content: space-between;
 }
 
 .el-card__body {
   padding: 10px;
 }
 
+::v-deep .el-textarea__inner {
+  resize: none !important;
+}
 .chat-box {
   flex: 1;
   overflow-y: auto;
@@ -298,4 +307,6 @@ export default {
   align-items: center;
   justify-content: center;
 }
+
+
 </style>

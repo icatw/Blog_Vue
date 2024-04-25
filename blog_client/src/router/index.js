@@ -98,7 +98,7 @@ const routes = [
     path: "/wenXinChat",
     component: resolve => require(["../views/aiChat/WenXin.vue"], resolve),
     meta: {
-      title: "文心一言"
+      title: "AI小助手"
     }
   },
   {
@@ -119,6 +119,10 @@ const routes = [
   {
     path: "/loading",
     component: resolve => require(["../components/model/Loading.vue"], resolve)
+  },
+  {
+    path:'*',
+    component: resolve => require(["../components/404.vue"], resolve)
   }
 ];
 
