@@ -16,9 +16,9 @@
         <div class="model-select">
           <label for="model">选择模型: </label>
           <el-select v-model="selectedModel" @change="updateUrl" id="model">
-            <el-option label="文心一言4.0" value="ErnieBot"></el-option>
+<!--            <el-option label="文心一言4.0" value="ErnieBot"></el-option>-->
             <el-option label="文心一言-Turbo" value="ErnieBot-Turbo"></el-option>
-<!--            <el-option label="BloomZ-7B" value="BloomZ-7B"></el-option>-->
+            <el-option label="文心一言3.5" value="BloomZ-7B"></el-option>
           </el-select>
         </div>
       </div>
@@ -45,17 +45,19 @@
             @blur="isInputFocused = false"
             placeholder="请输入消息...（可通过Alt+回车换行）"
             :class="{'focused': isInputFocused}"
-            class="input-height resizable-textarea"
+            class="input-height"
+            :rows="5"
             type="textarea"
-            autosize
         />
         <el-button
             :loading="isSending"
             @click="sendMessage"
             type="primary"
+            size="mini"
             class="send-button"
+            icon="el-icon-position"
         >
-          发送
+<!--          发送-->
         </el-button>
       </div>
 
@@ -85,10 +87,16 @@ export default {
     return {
       avatar: this.$store.state.avatar ? this.$store.state.avatar : this.$store.state.blogInfo.websiteConfig.touristAvatar,
       AI_avatar: this.$store.state.avatar ? this.$store.state.avatar : this.$store.state.blogInfo.websiteConfig.touristAvatar,
-      messages: [],
+      messages: [
+        {
+          id:1,
+          text:"您好，我是您的专属AI小助手，有什么可以帮助您的吗？",
+        }
+      ],
       clipboard: null,
       newMessage: '',
-      selectedModel: 'ErnieBot-Turbo',
+      // selectedModel: 'ErnieBot-Turbo',
+      selectedModel: 'BloomZ-7B',
       apiUrl: '/api/wenxin/turbo/param/chats',
       isInputFocused: false,
       isSending: false,
@@ -251,7 +259,8 @@ export default {
 
 .input-container {
   display: flex;
-  align-items: center;
+  //align-items: center;
+  position: relative; /* 设置为相对定位 */
 }
 
 .message-list {
@@ -284,7 +293,7 @@ export default {
 }
 
 .input-height {
-  width: 100%;
+  //width: 100%;
   font-size: 14px;
   border-radius: 10px;
   align-items: center;
@@ -293,7 +302,12 @@ export default {
 .send-button {
   min-height: 20px;
   margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
   border-radius: 10px;
+  position: absolute; /* 设置为绝对定位 */
+  right: 0; /* 放在右边 */
+  bottom: 0; /* 放在底部 */
 }
 .header-container {
   display: flex;

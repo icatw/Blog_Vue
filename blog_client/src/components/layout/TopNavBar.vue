@@ -95,7 +95,7 @@
         </div>-->
         <div class="menus-item">
           <router-link class="menu-btn" to="/wenXinChat">
-            <i class="iconfont iconpinglunzu" /> 文心一言
+            <i class="el-icon-chat-line-round" /> AI小助手
           </router-link>
         </div>
         <div class="menus-item">
@@ -197,11 +197,15 @@ ul {
   list-style: none;
 }
 .nav {
-  background: rgba(0, 0, 0, 0) !important;
+  //background: rgba(0, 0, 0, 0) !important;
+  background: rgba(0, 0, 0, 0.5) !important; /* 调整透明度 */
+  //mix-blend-mode: difference;
 }
 .nav a {
   //color: #eee !important;
-  color: #4c4948 !important;
+  //color: #4c4948 !important;
+  mix-blend-mode: difference;
+  text-shadow: 0.05rem 0.05rem 0.1rem rgba(0, 0, 0, 0.3); /* 增加文字阴影 */
 }
 .nav .menu-btn {
   text-shadow: 0.05rem 0.05rem 0.1rem rgba(0, 0, 0, 0.3);
@@ -210,7 +214,8 @@ ul {
   text-shadow: 0.1rem 0.1rem 0.2rem rgba(0, 0, 0, 0.15);
 }
 .theme--light.nav-fixed {
-  background: rgba(255, 255, 255, 0.8) !important;
+  //background: rgba(255, 255, 255, 0.8) !important;
+  background: rgba(255, 255, 255, 0.9) !important; /* 调整透明度 */
   box-shadow: 0 5px 6px -5px rgba(133, 133, 133, 0.6);
 }
 .theme--dark.nav-fixed {
@@ -220,7 +225,8 @@ ul {
   color: rgba(255, 255, 255, 0.8) !important;
 }
 .theme--light.nav-fixed a {
-  color: #4c4948 !important;
+  //color: #4c4948 !important;
+  color: #4c4948 !important; /* 调整文字颜色 */
 }
 .nav-fixed .menus-item a,
 .nav-fixed .blog-title a {
